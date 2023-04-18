@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from '../context/ThemeContext';
+import { UserContext } from '../context/UserContext';
 
 
 const Footer = () => {
     const {isDark} = useContext(ThemeContext);
-
+    const user = useContext(UserContext);
     return (
         <div
         className='content'
@@ -13,7 +14,7 @@ const Footer = () => {
             color: isDark ? 'white' : 'black',
         }}
         >
-            <p>좋은 하루 되세요</p>
+            <p>{user}님 좋은 하루 되세요</p>
         </div>
     );
 };

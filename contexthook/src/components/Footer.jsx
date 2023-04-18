@@ -6,10 +6,10 @@ const Footer = () => {
 
     const toggleTheme = () =>{
         setIsDark(!isDark); //리덕스 디스패쳐 
-        if(toggleDark == 'false'){
-            setToggleDark('ture');
+        if(toggleDark == 'white'){
+            setToggleDark('black');
         } else{
-            setToggleDark('false');
+            setToggleDark('white');
         }
     };
     
