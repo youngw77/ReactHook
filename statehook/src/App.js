@@ -43,7 +43,7 @@
 // export default App;
 
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   const [name, setName] = useState([
@@ -85,14 +85,23 @@ function App() {
     console.log(e, 'keydown');
   }
 
-  console.log(name);
-  console.log(name.length);
-  console.log(input);
-  console.log(count);
+  // console.log(name);
+  // console.log(name.length);
+  // console.log(input);
+  // console.log(count);
 
 
   const deleteList = (index) => {
-    console.log(index)
+    const indexId = name[index].id
+    setName(name.filter((name) => (name.id !== indexId)));
+  }
+  console.log(name.length);
+
+  // useEffect(() => {
+  // },[name])
+
+  const todoDone = (index) => {
+    console.log(index);
   }
 
   return (
@@ -111,11 +120,15 @@ function App() {
           </thead>
           <tbody>
             {name.map((todo, index) => {
-              return <tr key={todo.id}>
+              return <tr key={index}>
               <td>{todo.id}</td>
               <td>{todo.name}</td>
-              <td><button>Done</button></td>
-              <td><button onClick={deleteList(index)}>Delete</button></td>
+              <td><button
+              onClick={() => todoDone(index)}
+              >Done</button></td>
+              <td><button 
+              onClick={() => deleteList(index)}
+              >Delete</button></td>
             </tr>
             })}
           </tbody>
