@@ -46,38 +46,41 @@
 import { useEffect, useState } from 'react';
 
 function App() {
-  const [name, setName] = useState([
+  const [todo, setTodo] = useState([
     {
       id:1,
-      name:'홍길동',
-      checked: false,
+      todo:'공부',
+      done: false,
+      edit: false,
     },
     {
       id:2,
-      name:'김민수',
-      checked: false,
+      todo:'수면',
+      done: false,
+      edit: false,
     },
   ]);
   const [input, setInput] = useState('');
-  const [count, setCount] = useState(0);
+  const [todoText, setTodoText] = useState('');
+  // const [toggle, setToggle] = useState(todo.done);
 
   const handleInputChange = (e) => {
     setInput(e.target.value);
   }
 
   const handleUpload = () => {
-    setName((preState) => {
+    setTodo((preState) => {
         // ...preState,
         // input
       return([...preState,
         {
-          id: name.length+1,
-          name:input,
-          checked: false,
-        }
+          id: todo.length+1,
+          todo:input,
+          done: false,
+          edit: false,
+    }
       ]);
     })
-    setCount(count+1);
     setInput('');
   }
 
@@ -85,23 +88,44 @@ function App() {
     console.log(e, 'keydown');
   }
 
-  // console.log(name);
-  // console.log(name.length);
-  // console.log(input);
-  // console.log(count);
 
 
   const deleteList = (index) => {
-    const indexId = name[index].id
-    setName(name.filter((name) => (name.id !== indexId)));
+    const indexId = todo[index].id;
+    // fileter((todo) => (todo.id ! == todo[index].id)) 가 왜 안되는지
+    setTodo(todo.filter((todo) => (todo.id !== indexId)));
   }
-  console.log(name.length);
 
-  // useEffect(() => {
-  // },[name])
+  const doneToggle = (index) => {
+    // setTodo((preState) => {preState})
 
-  const todoDone = (index) => {
+    if(todo[index].done){
+      todo[index].done = false;
+    } else{
+      todo[index].done = true;
+    }
+    // table 값 변화 x 재 랜더링 필요
+  }
+
+  const editToggle = (index) => {
+    if(todo[index].edit){
+      todo[index].edit = false;
+    } else{
+      todo[index].edit = true;
+    }
+  }
+
+  const handleInputTodoChange = (e) => {
+    setTodoText(e.target.value);
+  }
+
+  const handleTodoEnter = (e, index) => {
     console.log(index);
+    if(e.keyCode === 13){
+      todo[index].todo = todoText;
+      todo[index].edit = false;
+    }
+    setTodoText('');
   }
 
   return (
@@ -113,19 +137,23 @@ function App() {
           <thead>
             <tr>
               <td>No</td>
-              <td>Name</td>
+              <td>Todo</td>
               <td>Done</td>
+              <td>Edit</td>
               <td>Delete</td>
             </tr>
           </thead>
           <tbody>
-            {name.map((todo, index) => {
+            {todo.map((todo, index) => {
               return <tr key={index}>
               <td>{todo.id}</td>
-              <td>{todo.name}</td>
-              <td><button
-              onClick={() => todoDone(index)}
-              >Done</button></td>
+              <td>{todo.edit ? <input value={todoText} onChange={handleInputTodoChange} onKeyDown={(event) =>handleTodoEnter(event, index)}></input> : todo.todo}</td>
+              <td
+              onClick={() => doneToggle(index)}
+              >{todo.done ? 'true' : 'false'}</td>
+              <td
+              onClick={() => {editToggle(index)}}
+              >{todo.edit ? 'true' : 'false'}</td>
               <td><button 
               onClick={() => deleteList(index)}
               >Delete</button></td>
