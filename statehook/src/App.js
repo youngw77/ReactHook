@@ -43,7 +43,7 @@
 // export default App;
 
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
   const [todo, setTodo] = useState([
@@ -70,8 +70,6 @@ function App() {
 
   const handleUpload = () => {
     setTodo((preState) => {
-        // ...preState,
-        // input
       return([...preState,
         {
           id: todo.length+1,
@@ -85,7 +83,19 @@ function App() {
   }
 
   const handleEnter = (e) => {
-    console.log(e, 'keydown');
+    if(e.keyCode === 13){
+      setTodo((preState) => {
+      return([...preState,
+        {
+          id: todo.length+1,
+          todo:input,
+          done: false,
+          edit: false,
+        }
+      ]);
+    })
+    setInput('');
+  }
   }
 
 
@@ -97,21 +107,42 @@ function App() {
   }
 
   const doneToggle = (index) => {
-    // setTodo((preState) => {preState})
-
     if(todo[index].done){
-      todo[index].done = false;
+      setTodo(
+        todo.map((preState) => {
+          console.log(preState);
+          console.log(preState.id);
+          return (preState.id === index + 1) ? {...preState, done: false} : preState
+        })
+      )
     } else{
-      todo[index].done = true;
+      setTodo(
+        todo.map((preState) => {
+          console.log(preState);
+          console.log(preState.id);
+          return (preState.id === index + 1) ? {...preState, done: true} : preState
+        })
+      )
     }
-    // table 값 변화 x 재 랜더링 필요
   }
 
   const editToggle = (index) => {
     if(todo[index].edit){
-      todo[index].edit = false;
+      setTodo(
+        todo.map((preState) => {
+          console.log(preState);
+          console.log(preState.id);
+          return (preState.id === index + 1) ? {...preState, edit: false} : preState
+        })
+      )
     } else{
-      todo[index].edit = true;
+      setTodo(
+        todo.map((preState) => {
+          console.log(preState);
+          console.log(preState.id);
+          return (preState.id === index + 1) ? {...preState, edit: true} : preState
+        })
+      )
     }
   }
 
@@ -131,8 +162,8 @@ function App() {
   return (
     <div>
       <h2>TodoList</h2>
-      <input type="text" value={input} onChange={handleInputChange}></input>
-      <button onClick={handleUpload} onKeyDown={handleEnter}>Add</button>
+      <input type="text" value={input} onChange={handleInputChange} onKeyDown={handleEnter}></input>
+      <button onClick={handleUpload}>Add</button>
          <table>
           <thead>
             <tr>
