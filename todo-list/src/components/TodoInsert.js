@@ -3,7 +3,7 @@ import { MdAddCircle } from 'react-icons/md';
 import {TiTrash, TiPencil} from "react-icons/ti";
 import './TodoInsert.css';
 
-const TodoInsert = ({onInsertToggle, onInsertTodo, selectedTodo}) => {
+const TodoInsert = ({onInsertToggle, onInsertTodo, selectedTodo, onRemove, onUpdate}) => {
     const [value, setValue] = useState("");
     
     const onChange = (e) => {
@@ -29,7 +29,7 @@ const TodoInsert = ({onInsertToggle, onInsertTodo, selectedTodo}) => {
             className='background' 
             onClick={onInsertToggle}
             ></div>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={selectedTodo ? () => {onUpdate(selectedTodo.id, selectedTodo.text)} : onSubmit}>
                 <input 
                 placeholder='please type' 
                 value={value} 
@@ -37,8 +37,8 @@ const TodoInsert = ({onInsertToggle, onInsertTodo, selectedTodo}) => {
                 ></input>
                 {selectedTodo ? (
                     <div className='rewrite'>
-                        <TiPencil />
-                        <TiTrash />
+                        <TiPencil onClick={() => {onUpdate(selectedTodo.id, value)}}/>
+                        <TiTrash  onClick={() => {onRemove(selectedTodo.id)}}/>
                     </div>
                 ) :<button type='submit'>
                     <MdAddCircle />
