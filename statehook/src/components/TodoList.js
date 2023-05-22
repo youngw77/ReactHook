@@ -1,21 +1,7 @@
 import { useState } from 'react';
 
-const TodoList = () => {
+const TodoList = ({todo, setTodo}) => {
     const [todoText, setTodoText] = useState('');
-    const [todo, setTodo] = useState([
-        {
-          id:1,
-          todo:'공부',
-          done: false,
-          edit: false,
-        },
-        {
-          id:2,
-          todo:'수면',
-          done: false,
-          edit: false,
-        },
-      ]);
 
       const deleteList = (index) => {
         const indexId = todo[index].id;
