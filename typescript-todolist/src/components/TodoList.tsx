@@ -28,6 +28,7 @@ export const TodoList = () => {
         },
     ]);
     const [input , setInput] = useState<string>("");
+    const [todoText, setTodoText] = useState<string>("");
 
     const handleClick = () => {
         console.log('click');
@@ -44,11 +45,46 @@ export const TodoList = () => {
         setInput(e.target.value);
     }
     const handleEdit = (index:number) => {
-        
+        if(todo[index].edit){
+            setTodo(
+                todo.map((prev) => {
+                    return (prev.id === index + 1) ? {...prev, edit: false} : prev
+                })
+            )
+        } else {
+            setTodo(
+                todo.map((prev) => {
+                    return (prev.id === index + 1) ? {...prev, edit: true} : prev
+                })
+            )
+        }
     }
     const handleDelete = (index:number) => {
         const indexId:number = todo[index].id;
         setTodo(todo.filter((todo) => (todo.id !== indexId)));
+    }
+    const handleInputTodoChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setTodoText(e.target.value);
+    }
+    const handleComplete = (index:number) => {
+        if(todo[index].edit === false){
+            setTodo(
+                todo.map((todo) => {
+                    if(todo.id === index+1){
+                        return {...todo, complete: !todo.complete};
+                    }
+                    return todo;
+                })
+            )
+        }
+        
+    }
+    const handleEditEnter = (e:React.KeyboardEvent<HTMLInputElement>, index:number) => {
+        if(e.keyCode === 13){
+            todo[index].todo = todoText;
+            todo[index].edit = false;
+            setTodoText("");
+        }
     }
 
   return (
@@ -75,7 +111,17 @@ export const TodoList = () => {
                 {todo.map((todo, index) => {
                     return <tr key={todo.id}>
                         <td>{todo.id}</td>
-                        <td>{todo.edit ? <input></input> : todo.todo}</td>
+                        <td
+                        onClick={() => handleComplete(index)}
+                        style={{textDecoration: todo.complete ? "line-through" : "none"}}
+                        >{todo.edit ? 
+                        <input 
+                        value={todoText} 
+                        onChange={handleInputTodoChange}
+                        onKeyDown={(e) => handleEditEnter(e, index)}
+                        placeholder={todo.todo}
+                        ></input> : todo.todo}
+                        </td>
                         <td><button onClick={() => handleEdit(index)}>edit</button></td>
                         <td><button onClick={() => handleDelete(index)}>delete</button></td>
                     </tr>
