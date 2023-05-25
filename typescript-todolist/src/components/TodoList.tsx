@@ -10,7 +10,8 @@ interface item {
 export const TodoList = () => {
     const [todo, setTodo] = useState<item[]>([
         {
-            id:1,todo:"TypeScript",
+            id:1,
+            todo:"TypeScript",
             edit:false,
             complete:false
         },
@@ -29,6 +30,7 @@ export const TodoList = () => {
     ]);
     const [input , setInput] = useState<string>("");
     const [todoText, setTodoText] = useState<string>("");
+    const [text, setText] = useState<string>("");
 
     const handleClick = () => {
         const newTodoItem:item = {
@@ -97,6 +99,9 @@ export const TodoList = () => {
             setTodoText("");
         }
     }
+    const handleText = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setText(e.target.value);
+    }
 
   return (
     <div>
@@ -110,6 +115,17 @@ export const TodoList = () => {
         <button
         onClick={handleClick}
         >Add</button>
+        <br />
+
+
+        <input 
+        type="text" 
+        placeholder='search todoItem' 
+        value={text}
+        onChange={(e) => handleText(e)}
+        />
+
+
         <table>
             <thead>
                 <tr>
@@ -120,7 +136,9 @@ export const TodoList = () => {
                 </tr>
             </thead>
             <tbody>
-                {todo.map((todo, index) => {
+                {todo.filter((todo) => {
+                    return text.toLowerCase() === '' ? todo : todo.todo.toLowerCase().includes(text)
+                }).map((todo, index) => {
                     return <tr key={todo.id}>
                         <td>{todo.id}</td>
                         <td
