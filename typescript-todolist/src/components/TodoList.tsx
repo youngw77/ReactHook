@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useLayoutEffect } from 'react'
 
 interface item {
     id:number;
@@ -31,7 +31,10 @@ export const TodoList = () => {
     const [input , setInput] = useState<string>("");
     const [todoText, setTodoText] = useState<string>("");
     const [text, setText] = useState<string>("");
-
+    const focusRef = useRef<HTMLInputElement>(null);
+    useLayoutEffect(() => {
+        if (focusRef.current !== null) focusRef.current.focus();
+      });
     const handleClick = () => {
         const newTodoItem:item = {
             id:todo[todo.length-1].id+1,
@@ -150,6 +153,7 @@ export const TodoList = () => {
                         onChange={handleInputTodoChange}
                         onKeyDown={(e) => handleEditEnter(e, index)}
                         placeholder={todo.todo}
+                        ref={focusRef}
                         ></input> : todo.todo}
                         </td>
                         <td><button onClick={() => handleEdit(index)}>edit</button></td>
