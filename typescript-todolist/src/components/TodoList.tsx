@@ -31,7 +31,6 @@ export const TodoList = () => {
     const [todoText, setTodoText] = useState<string>("");
 
     const handleClick = () => {
-        console.log('click');
         const newTodoItem:item = {
             id:todo[todo.length-1].id+1,
             todo: input,
@@ -43,6 +42,18 @@ export const TodoList = () => {
     }
     const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
+    }
+    const handleInputEnter = (e:React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.keyCode === 13){
+            const newTodoItem:item = {
+                id:todo[todo.length-1].id+1,
+                todo: input,
+                edit: false,
+                complete: false
+            }
+            setTodo([...todo, newTodoItem]);
+            setInput("");
+        }
     }
     const handleEdit = (index:number) => {
         if(todo[index].edit){
@@ -94,6 +105,7 @@ export const TodoList = () => {
         placeholder='add todo item'
         value={input}
         onChange={handleInputChange}
+        onKeyDown={handleInputEnter}
         />
         <button
         onClick={handleClick}
