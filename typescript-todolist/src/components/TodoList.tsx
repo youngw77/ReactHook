@@ -5,29 +5,15 @@ interface item {
     todo:string;
     edit:boolean;
     complete:boolean;
+  }
+
+interface Props {
+    todo: item[];
+    setTodo: React.Dispatch<React.SetStateAction<item[]>>;
 }
 
-export const TodoList = () => {
-    const [todo, setTodo] = useState<item[]>([
-        {
-            id:1,
-            todo:"TypeScript",
-            edit:false,
-            complete:false
-        },
-        {
-            id:2,
-            todo:"React",
-            edit:false,
-            complete:false
-        },
-        {
-            id:3,
-            todo:"Angular",
-            edit:false,
-            complete:false
-        },
-    ]);
+
+export const TodoList = ({todo, setTodo}:Props) => {
     const [input , setInput] = useState<string>("");
     const [todoText, setTodoText] = useState<string>("");
     const [text, setText] = useState<string>("");
@@ -63,13 +49,13 @@ export const TodoList = () => {
     const handleEdit = (index:number) => {
         if(todo[index].edit){
             setTodo(
-                todo.map((prev) => {
+                todo.map((prev:any) => {
                     return (prev.id === index + 1) ? {...prev, edit: false} : prev
                 })
             )
         } else {
             setTodo(
-                todo.map((prev) => {
+                todo.map((prev:any) => {
                     return (prev.id === index + 1) ? {...prev, edit: true} : prev
                 })
             )
@@ -77,7 +63,7 @@ export const TodoList = () => {
     }
     const handleDelete = (index:number) => {
         const indexId:number = todo[index].id;
-        setTodo(todo.filter((todo) => (todo.id !== indexId)));
+        setTodo(todo.filter((todo:any) => (todo.id !== indexId)));
     }
     const handleInputTodoChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setTodoText(e.target.value);
@@ -85,7 +71,7 @@ export const TodoList = () => {
     const handleComplete = (index:number) => {
         if(todo[index].edit === false){
             setTodo(
-                todo.map((todo) => {
+                todo.map((todo:any) => {
                     if(todo.id === index+1){
                         return {...todo, complete: !todo.complete};
                     }
@@ -139,9 +125,9 @@ export const TodoList = () => {
                 </tr>
             </thead>
             <tbody>
-                {todo.filter((todo) => {
+                {todo.filter((todo:any) => {
                     return text.toLowerCase() === '' ? todo : todo.todo.toLowerCase().includes(text)
-                }).map((todo, index) => {
+                }).map((todo:any, index:number) => {
                     return <tr key={todo.id}>
                         <td>{todo.id}</td>
                         <td
