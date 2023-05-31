@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {TodoList} from './components/TodoList';
 import { Template } from './components/Template';
+import axios from 'axios';
 
 interface item {
   id:number;
@@ -10,26 +11,32 @@ interface item {
 }
 
 function App() {
-  const [todo, setTodo] = useState<item[]>([
-    {
-        id:1,
-        todo:"TypeScript",
-        edit:false,
-        complete:false
-    },
-    {
-        id:2,
-        todo:"React",
-        edit:false,
-        complete:false
-    },
-    {
-        id:3,
-        todo:"Angular",
-        edit:false,
-        complete:false
-    },
-]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [todo, setTodo] = useState<item[]>([]);
+
+useEffect(() => {
+  const fetchUsers = async () => {
+    try {
+      setError(null);
+      setTodo([]);
+      setLoading(true);
+      const response = await axios.get(
+        'http://localhost:5000/findAll'
+      );
+      setTodo(response.data);
+    } catch (error:any) {
+      setError(error);
+    }
+    setLoading(false);
+  };
+
+  fetchUsers();
+}, []);
+
+if (loading) return <div>로딩중..</div>;
+if (error) return <div>에러가 발생했습니다</div>;
+if (!todo || todo.length === 0) return null;
 
   return (
     <div>
