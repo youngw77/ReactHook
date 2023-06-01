@@ -1,4 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react'
+import axios from 'axios';
 
 interface item {
     id:number;
@@ -24,16 +25,10 @@ export const TodoList = ({todo, setTodo}:Props) => {
       });
     const handleClick = async () => {
     const addRecordEndpoint = "http://localhost:5000/insertOne";
-    fetch(addRecordEndpoint, {
-    method: 'POST',
-    headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5000",
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
+    axios.post(addRecordEndpoint, {
         todo: input
-    })})
-    .then(res => res.json())
+    })
+    .then(res => res.data.body)
     .then(res=>console.log(res));
 
     setInput("");
