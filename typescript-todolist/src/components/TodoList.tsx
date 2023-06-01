@@ -25,40 +25,40 @@ export const TodoList = ({todo, setTodo}:Props) => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
     const handleClick = async () => {
-        const newTodoItem:item = {
-            id:todo[todo.length-1].id+1,
-            todo: input,
-            edit: false,
-            complete: false
-        }
+        // const newTodoItem:item = {
+        //     id:todo[todo.length-1].id+1,
+        //     todo: input,
+        //     edit: false,
+        //     complete: false
+        // }
         // setTodo([...todo, newTodoItem]);
         // setInput("");
 
-    const addRecordEndpoint = "http://localhost:5000/findAll";
+    const addRecordEndpoint = "http://localhost:5000/insertOne";
 
     const options = {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(
             {
-                id: todo[todo.length-1].id + 1,
                 todo: input
             }
         )
     }
+
     setInput("");
 
     const response:any = await axios(addRecordEndpoint, options);
     console.log(response);
-    const jsonResponse = await JSON.parse(response.config.body);
+    // const jsonResponse = await JSON.parse(response.config.body);
+    const jsonResponse = await response.config.body;
     console.log(jsonResponse);
-    console.log(response.data);
-    response.data.push(jsonResponse);
+    console.log(response.config.body);
     return jsonResponse;
-
     }
+    
     const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
     }
