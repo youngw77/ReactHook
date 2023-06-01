@@ -50,19 +50,32 @@ export const TodoList = ({todo, setTodo}:Props) => {
         }
     }
     const handleEdit = (index:number) => {
-        if(todo[index].edit){
-            setTodo(
-                todo.map((prev:any) => {
-                    return (prev.id === index + 1) ? {...prev, edit: false} : prev
-                })
-            )
-        } else {
-            setTodo(
-                todo.map((prev:any) => {
-                    return (prev.id === index + 1) ? {...prev, edit: true} : prev
-                })
-            )
-        }
+        const addRecordEndpoint = "http://localhost:5000/insertOne";
+        // if(true){
+            axios.post(addRecordEndpoint, {
+                todo: todo[index].todo
+            })
+        // } else {
+        //     axios.post(addRecordEndpoint, {
+        //         todo: todo.map((prev:any) => {
+        //             return (prev.id === index + 1) ? {...prev, edit: true} : prev
+        //         })
+        //     })
+        // }
+
+        // if(todo[index].edit){
+        //     setTodo(
+        //         todo.map((prev:any) => {
+        //             return (prev.id === index + 1) ? {...prev, edit: false} : prev
+        //         })
+        //     )
+        // } else {
+        //     setTodo(
+        //         todo.map((prev:any) => {
+        //             return (prev.id === index + 1) ? {...prev, edit: true} : prev
+        //         })
+        //     )
+        // }
     }
     const handleDelete = (index:number) => {
         const indexId:number = todo[index].id;
