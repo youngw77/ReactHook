@@ -39,13 +39,13 @@ export const TodoList = ({todo, setTodo}:Props) => {
     }
     const handleInputEnter = (e:React.KeyboardEvent<HTMLInputElement>) => {
         if(e.keyCode === 13){
-            const newTodoItem:item = {
-                id:todo[todo.length-1].id+1,
-                todo: input,
-                edit: false,
-                complete: false
-            }
-            setTodo([...todo, newTodoItem]);
+            const addRecordEndpoint = "http://localhost:5000/insertOne";
+            axios.post(addRecordEndpoint, {
+                todo: input
+            })
+            .then(res => res.data.body)
+            .then(res=>console.log(res));
+
             setInput("");
         }
     }
