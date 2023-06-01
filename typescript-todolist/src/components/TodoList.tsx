@@ -23,6 +23,7 @@ export const TodoList = ({todo, setTodo}:Props) => {
     useLayoutEffect(() => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
+
     const handleClick = async () => {
     const addRecordEndpoint = "http://localhost:5000/insertOne";
     axios.post(addRecordEndpoint, {
@@ -66,7 +67,13 @@ export const TodoList = ({todo, setTodo}:Props) => {
     }
     const handleDelete = (index:number) => {
         const indexId:number = todo[index].id;
-        setTodo(todo.filter((todo:any) => (todo.id !== indexId)));
+        axios.get("http://localhost:5000/delete/" + indexId)
+        .then(res => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
     const handleInputTodoChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setTodoText(e.target.value);
