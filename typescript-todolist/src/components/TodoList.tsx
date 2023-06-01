@@ -1,6 +1,4 @@
 import React, { useState, useRef, useLayoutEffect } from 'react'
-import axios from 'axios';
-
 
 interface item {
     id:number;
@@ -25,38 +23,20 @@ export const TodoList = ({todo, setTodo}:Props) => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
     const handleClick = async () => {
-        // const newTodoItem:item = {
-        //     id:todo[todo.length-1].id+1,
-        //     todo: input,
-        //     edit: false,
-        //     complete: false
-        // }
-        // setTodo([...todo, newTodoItem]);
-        // setInput("");
-
     const addRecordEndpoint = "http://localhost:5000/insertOne";
-
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {
-                todo: input
-            }
-        )
-    }
+    fetch(addRecordEndpoint, {
+    method: 'POST',
+    headers: {
+        "Access-Control-Allow-Origin": "http://localhost:5000",
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        todo: input
+    })})
+    .then(res => res.json())
+    .then(res=>console.log(res));
 
     setInput("");
-
-    const response:any = await axios(addRecordEndpoint, options);
-    console.log(response);
-    // const jsonResponse = await JSON.parse(response.config.body);
-    const jsonResponse = await response.config.body;
-    console.log(jsonResponse);
-    console.log(response.config.body);
-    return jsonResponse;
     }
     
     const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
