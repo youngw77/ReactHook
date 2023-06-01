@@ -1,4 +1,6 @@
 import React, { useState, useRef, useLayoutEffect } from 'react'
+import axios from 'axios';
+
 
 interface item {
     id:number;
@@ -18,18 +20,44 @@ export const TodoList = ({todo, setTodo}:Props) => {
     const [todoText, setTodoText] = useState<string>("");
     const [text, setText] = useState<string>("");
     const focusRef = useRef<HTMLInputElement>(null);
+
     useLayoutEffect(() => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
-    const handleClick = () => {
+    const handleClick = async () => {
         const newTodoItem:item = {
             id:todo[todo.length-1].id+1,
             todo: input,
             edit: false,
             complete: false
         }
-        setTodo([...todo, newTodoItem]);
-        setInput("");
+        // setTodo([...todo, newTodoItem]);
+        // setInput("");
+
+    const addRecordEndpoint = "http://localhost:5000/findAll";
+
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                id: todo[todo.length-1].id + 1,
+                todo: input
+            }
+        )
+    }
+    setInput("");
+
+    const response:any = await axios(addRecordEndpoint, options);
+    console.log(response);
+    const jsonResponse = await JSON.parse(response.config.body);
+    console.log(jsonResponse);
+    console.log(response.data);
+    response.data.push(jsonResponse);
+    return jsonResponse;
+
     }
     const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
