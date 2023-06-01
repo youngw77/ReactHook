@@ -1,4 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react'
+import axios from 'axios';
 
 interface item {
     id:number;
@@ -18,19 +19,21 @@ export const TodoList = ({todo, setTodo}:Props) => {
     const [todoText, setTodoText] = useState<string>("");
     const [text, setText] = useState<string>("");
     const focusRef = useRef<HTMLInputElement>(null);
+
     useLayoutEffect(() => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
-    const handleClick = () => {
-        const newTodoItem:item = {
-            id:todo[todo.length-1].id+1,
-            todo: input,
-            edit: false,
-            complete: false
-        }
-        setTodo([...todo, newTodoItem]);
-        setInput("");
+    const handleClick = async () => {
+    const addRecordEndpoint = "http://localhost:5000/insertOne";
+    axios.post(addRecordEndpoint, {
+        todo: input
+    })
+    .then(res => res.data.body)
+    .then(res=>console.log(res));
+
+    setInput("");
     }
+    
     const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setInput(e.target.value);
     }
