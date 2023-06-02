@@ -18,11 +18,14 @@ export const TodoList = ({todo, setTodo}:Props) => {
     const [input , setInput] = useState<string>("");
     const [todoText, setTodoText] = useState<string>("");
     const [text, setText] = useState<string>("");
+    const [todoIndex, setTodoIndex] = useState<any>();
     const focusRef = useRef<HTMLInputElement>(null);
 
     useLayoutEffect(() => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
+
+
     const handleClick = async () => {
     const addRecordEndpoint = "http://localhost:5000/insertOne";
     axios.post(addRecordEndpoint, {
@@ -50,11 +53,13 @@ export const TodoList = ({todo, setTodo}:Props) => {
         }
     }
     const handleEdit = (index:number) => {
-        const addRecordEndpoint = "http://localhost:5000/insertOne";
+        // const addRecordEndpoint = "http://localhost:5000/insertOne";
+        //     axios.post(addRecordEndpoint, {
+        //         todo: todo[index].todo
+        //     })
+        setTodoText(todo[index].todo);
+        setTodoIndex(index);
         // if(true){
-            axios.post(addRecordEndpoint, {
-                todo: todo[index].todo
-            })
         // } else {
         //     axios.post(addRecordEndpoint, {
         //         todo: todo.map((prev:any) => {
@@ -79,7 +84,13 @@ export const TodoList = ({todo, setTodo}:Props) => {
     }
     const handleDelete = (index:number) => {
         const indexId:number = todo[index].id;
-        setTodo(todo.filter((todo:any) => (todo.id !== indexId)));
+        axios.get("http://localhost:5000/delete/" + indexId)
+        .then(res => {
+            console.log(res);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
     }
     const handleInputTodoChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setTodoText(e.target.value);
@@ -107,6 +118,20 @@ export const TodoList = ({todo, setTodo}:Props) => {
     const handleText = (e:React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
     }
+    const handleEditButton = () => {
+        const addRecordEndpoint = "http://localhost:5000/modifyOne";
+        axios.post(addRecordEndpoint, {
+            id: todo[todoIndex].id,
+            todo: todoText
+        })
+        .then(res => res.data.body)
+        .then(res=>console.log(res));
+
+    setTodoText("");
+    }
+    const handleEditText = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setTodoText(e.target.value);
+    }
 
   return (
     <div>
@@ -129,6 +154,17 @@ export const TodoList = ({todo, setTodo}:Props) => {
         value={text}
         onChange={(e) => handleText(e)}
         />
+        <br />
+
+        <input 
+        type="text"
+        placeholder={todoText !== null ? "todoEdit" : todoText}
+        value={todoText}
+        onChange={(e) => handleEditText(e)}
+        />
+        <button
+        onClick={handleEditButton}
+        >Edit</button>
 
 
         <table>
