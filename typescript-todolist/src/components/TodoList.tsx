@@ -6,8 +6,7 @@ interface item {
     todo:string;
     edit:boolean;
     complete:boolean;
-  }
-
+}
 interface Props {
     todo: item[];
     setTodo: React.Dispatch<React.SetStateAction<item[]>>;
@@ -40,7 +39,7 @@ export const TodoList = ({todo, setTodo}:Props) => {
         setInput(e.target.value);
     }
     const handleInputEnter = (e:React.KeyboardEvent<HTMLInputElement>) => {
-        if(e.keyCode === 13){
+        if(e.key === 'Enter'){
             const addRecordEndpoint = "http://localhost:5000/insertOne";
             axios.post(addRecordEndpoint, {
                 todo: input
@@ -82,7 +81,7 @@ export const TodoList = ({todo, setTodo}:Props) => {
         
     }
     const handleEditEnter = (e:React.KeyboardEvent<HTMLInputElement>, index:number) => {
-        if(e.keyCode === 13){
+        if(e.key === 'Enter'){
             todo[index].todo = todoText;
             todo[index].edit = false;
             setTodoText("");
@@ -106,7 +105,7 @@ export const TodoList = ({todo, setTodo}:Props) => {
         setTodoText(e.target.value);
     }
     const handleTextEnter = (e:React.KeyboardEvent<HTMLInputElement>) => {
-        if(e.keyCode === 13){
+        if(e.key === 'Enter'){
             const addRecordEndpoint = "http://localhost:5000/modifyOne";
             axios.post(addRecordEndpoint, {
                 id: todo[todoIndex].id,
@@ -138,7 +137,7 @@ export const TodoList = ({todo, setTodo}:Props) => {
         type="text" 
         placeholder='search todoItem' 
         value={text}
-        onChange={(e) => handleTextChange(e)}
+        onChange={handleTextChange}
         />
         <br />
 
