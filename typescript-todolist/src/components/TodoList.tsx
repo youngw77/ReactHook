@@ -24,8 +24,6 @@ export const TodoList = ({todo, setTodo}:Props) => {
     useLayoutEffect(() => {
         if (focusRef.current !== null) focusRef.current.focus();
       });
-
-
     const handleClick = async () => {
     const addRecordEndpoint = "http://localhost:5000/insertOne";
     axios.post(addRecordEndpoint, {
