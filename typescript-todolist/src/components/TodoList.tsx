@@ -1,15 +1,13 @@
 import React, { useState, useRef, useLayoutEffect } from 'react'
 import axios from 'axios';
 
-interface item {
+interface Props {
+    todo: todoItem[];
+    setTodo: React.Dispatch<React.SetStateAction<todoItem[]>>;
+}
+interface todoItem {
     id:number;
     todo:string;
-    edit:boolean;
-    complete:boolean;
-}
-interface Props {
-    todo: item[];
-    setTodo: React.Dispatch<React.SetStateAction<item[]>>;
 }
 
 
@@ -17,7 +15,7 @@ export const TodoList = ({todo, setTodo}:Props) => {
     const [input , setInput] = useState<string>("");
     const [todoText, setTodoText] = useState<string>("");
     const [text, setText] = useState<string>("");
-    const [todoIndex, setTodoIndex] = useState<any>();
+    const [todoIndex, setTodoIndex] = useState<number>();
     const focusRef = useRef<HTMLInputElement>(null);
 
     useLayoutEffect(() => {
@@ -63,29 +61,6 @@ export const TodoList = ({todo, setTodo}:Props) => {
         .catch((err) => {
             console.log(err);
         })
-    }
-    const handleInputTodoChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        setTodoText(e.target.value);
-    }
-    const handleComplete = (index:number) => {
-        if(todo[index].edit === false){
-            setTodo(
-                todo.map((todo:any) => {
-                    if(todo.id === index+1){
-                        return {...todo, complete: !todo.complete};
-                    }
-                    return todo;
-                })
-            )
-        }
-        
-    }
-    const handleEditEnter = (e:React.KeyboardEvent<HTMLInputElement>, index:number) => {
-        if(e.key === 'Enter'){
-            todo[index].todo = todoText;
-            todo[index].edit = false;
-            setTodoText("");
-        }
     }
     const handleTextChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setText(e.target.value);
@@ -163,22 +138,12 @@ export const TodoList = ({todo, setTodo}:Props) => {
                 </tr>
             </thead>
             <tbody>
-                {todo.filter((todo:any) => {
+                {todo.filter((todo:todoItem) => {
                     return text.toLowerCase() === '' ? todo : todo.todo.toLowerCase().includes(text)
-                }).map((todo:any, index:number) => {
+                }).map((todo:todoItem, index:number) => {
                     return <tr key={todo.id}>
                         <td>{todo.id}</td>
-                        <td
-                        onClick={() => handleComplete(index)}
-                        style={{textDecoration: todo.complete ? "line-through" : "none"}}
-                        >{todo.edit ? 
-                        <input 
-                        value={todoText} 
-                        onChange={handleInputTodoChange}
-                        onKeyDown={(e) => handleEditEnter(e, index)}
-                        placeholder={todo.todo}
-                        ref={focusRef}
-                        ></input> : todo.todo}
+                        <td>{todo.todo}
                         </td>
                         <td><button onClick={() => handleEdit(index)}>edit</button></td>
                         <td><button onClick={() => handleDelete(index)}>delete</button></td>

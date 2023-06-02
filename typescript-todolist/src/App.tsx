@@ -3,17 +3,15 @@ import {TodoList} from './components/TodoList';
 import { Template } from './components/Template';
 import axios from 'axios';
 
-interface item {
+interface todoItem {
   id:number;
   todo:string;
-  edit:boolean;
-  complete:boolean;
 }
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [todo, setTodo] = useState<item[]>([]);
+  const [todo, setTodo] = useState<todoItem[]>([]);
 
 useEffect(() => {
   const fetchUsers = async () => {
